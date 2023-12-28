@@ -118,3 +118,35 @@ func createUser(db *sql.DB) http.HandlerFunc {
 		json.NewEncoder(w).Encode(u)
 	}
 }
+
+func updateUser(db *sql.DB) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		var u User
+		json.NewDecoder(r.Body).Decode(&u)
+
+		vars := mux.Vars(r)
+		id := vars["id"]
+
+		// Execute the update query
+		_, err := db.Exec(
+			"UPDATE users SET name = $1, email = $2 WHERE id = $3",
+			u.Name,
+			u.Email,
+			id,
+		)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		// Retrieve the updated user data from the database
+		var updatedUser User
+		err = db.QueryRow("SELECT id, name, email FROM users WHERE id = $1", id).
+			Scan(&updatedUser.Id, &updatedUser.Name, &updatedUser.Email)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		// Send the updated user data in the ResponseWriter
+		json.NewEncoder(w).Encode(updatedUser)
+	}
+}
