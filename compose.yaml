@@ -1,4 +1,17 @@
 services:
+  goapp:
+    container_name: goapp
+    image: goapp:1.0.0
+    build:
+      context: ./api
+      dockerfile: go.dockerfile
+    environment:
+      DATABASE_URL: "postgres://postgres:postgres@db:5432/postgres?sslmode=disable"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
   db:
     container_name: db
     image: postgres:13
@@ -13,6 +26,3 @@ services:
 
 volumes:
   pgdata: {}
-
-
-
