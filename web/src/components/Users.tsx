@@ -78,25 +78,38 @@ export const Users = () => {
 
       {/* display users */}
       {isUsersEmpty ? (
-       <div role="alert" className="alert">
-       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-info shrink-0 w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-       <span>No users added. Use the add user action below to add a user</span>
-     </div>
-      ):(
+        <div role="alert" className="alert">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            className="stroke-info shrink-0 w-6 h-6"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          <span>
+            No users added. Use the add user action below to add a user
+          </span>
+        </div>
+      ) : (
         <div className="overflow-x-auto">
-        <table className="table">
-          {/* head */}
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map(
-              (user) => (
+          <table className="table">
+            {/* head */}
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((user) => (
                 <tr key={user.id}>
                   <th>{user.id}</th>
                   <td>{user.name}</td>
@@ -123,11 +136,10 @@ export const Users = () => {
                     </button>
                   </td>
                 </tr>
-              ),
-            )}
-          </tbody>
-        </table>
-      </div>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
       <div className="w-full grid grid-cols-2">
         {/* Create user */}
