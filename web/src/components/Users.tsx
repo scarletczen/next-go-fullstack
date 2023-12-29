@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Card } from "./Card";
 import { API_URL } from "@/utils/constants";
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-}
+import { User } from "@/utils/types";
 
 export const Users = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -70,82 +64,112 @@ export const Users = () => {
   };
 
   return (
-    <div
-      className={`user-interface bg-cyan-500 w-full max-w-md p-4 my-4 rounded shadow`}
-    >
-      <img
-        src={`/go-logo.svg`}
-        alt={`Logo`}
-        className="w-20 h-20 mb06 mx-auto"
-      />
-      <h2 className="text-xl font-bold text-center text-white mb-6">
-        Go Backend
+    <div className={`w-full max-w-2xl`}>
+      <figure>
+        <img
+          src={`/go-logo.svg`}
+          alt={`Logo`}
+          className="w-24 h-auto mb-6 mx-auto"
+        />
+      </figure>
+      <h2 className="text-center text-2xl font-bold">
+        Go + Next + Postgres + Docker
       </h2>
-      {/* Create user */}
-      <form
-        onSubmit={createUser}
-        className="flex items-center justify-between bg-white p-4 rounded shadow"
-      >
-        <input
-          placeholder="Name"
-          value={newUser.name}
-          onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
-          className="mb-2 w-full p-2 border border-gray-300 rounded"
-        />
-        <input
-          placeholder="Email"
-          value={newUser.email}
-          onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
-          className="mb-2 w-full p-2 border border-gray-300 rounded"
-        />
-        <button
-          className="w-full p-2 text-white bg-blue-500 roudned hover:bg-blue-600"
-          type="submit"
-        >
-          Add User
-        </button>
-      </form>
-      {/* Update user */}
-      <form
-        onSubmit={handleUpdateUser}
-        className="mb-6 p-4 bg-blue-100 rounded shadow"
-      >
-        <input
-          placeholder="User ID"
-          value={updateUser.id}
-          onChange={(e) => setUpdateUser({ ...updateUser, id: e.target.value })}
-          className="mb-2 w-full p-2 border border-gray-300 rounded"
-        />
-        <input
-          placeholder="New Name"
-          value={updateUser.name}
-          onChange={(e) =>
-            setUpdateUser({ ...updateUser, name: e.target.value })
-          }
-          className="mb-2 w-full p-2 border border-gray-300 rounded"
-        />
-        <button
-          type="submit"
-          className="w-full p-2 text-white bg-green-500 rounded hover:bg-green-600"
-        >
-          Update User
-        </button>
-      </form>
+      <h3 className="text-xl text-center font-semibold">Users List</h3>
       {/* display users */}
-      <div className="space-y-4">
-        {users.map((user) => (
-          <div
-            key={user.id}
-            className="flex items-center justify-between bg-white p-4 rounded-lg shadow"
-          >
-            <Card {...user} />
-            <button
-            onClick={()=>deleteUser(user.id)}
-            className={`text-white py-2 px-4 rounded`}>
-              Delete User
-            </button> 
+      <div className="overflow-x-auto">
+        <table className="table">
+          {/* head */}
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[...users, { id: 1, name: "abhinav", email: "abhinav" }].map(
+              (user) => (
+                <tr key={user.id}>
+                  <th>{user.id}</th>
+                  <td>{user.name}</td>
+                  <td>{user.email}</td>
+                  <td>
+                    <button
+                      onClick={() => deleteUser(user.id)}
+                      className={`btn btn-xs btn-error btn-circle`}
+                    >
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-auto w-5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth="2"
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  </td>
+                </tr>
+              ),
+            )}
+          </tbody>
+        </table>
+      </div>
+
+      <h3 className="text-center text-xl font-semibold">Actions</h3>
+      <div className="w-full grid grid-cols-2">
+        {/* Create user */}
+        <form onSubmit={createUser} className="card p-2 space-y-4">
+          <input
+            type="text"
+            placeholder="Name"
+            value={newUser.name}
+            onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+            className="w-full input input-bordered"
+          />
+          <input
+            placeholder="Email"
+            value={newUser.email}
+            onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
+            className="w-full input input-bordered"
+          />
+          <div className="card-actions w-full">
+            <button className="btn btn-success w-full" type="submit">
+              Add User
+            </button>
           </div>
-        ))}
+        </form>
+        {/* Update user */}
+        <form onSubmit={handleUpdateUser} className="card p-2 space-y-4">
+          <input
+            placeholder="User ID"
+            type="text"
+            value={updateUser.id}
+            onChange={(e) =>
+              setUpdateUser({ ...updateUser, id: e.target.value })
+            }
+            className="w-full input input-bordered"
+          />
+          <input
+            placeholder="New Name"
+            type="text"
+            value={updateUser.name}
+            onChange={(e) =>
+              setUpdateUser({ ...updateUser, name: e.target.value })
+            }
+            className="w-full input input-bordered"
+          />
+          <button type="submit" className="btn btn-info w-full">
+            Update User
+          </button>
+        </form>
       </div>
     </div>
   );
