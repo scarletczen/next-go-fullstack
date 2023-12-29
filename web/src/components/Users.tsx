@@ -7,7 +7,7 @@ export const Users = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [newUser, setNewUser] = useState({ name: "", email: "" });
   const [updateUser, setUpdateUser] = useState({ id: "", name: "", email: "" });
-
+  const isUsersEmpty = !users || users.length === 0;
   // Fetch all users
   useEffect(() => {
     const fetchData = async () => {
@@ -64,20 +64,26 @@ export const Users = () => {
   };
 
   return (
-    <div className={`w-full max-w-2xl`}>
+    <div className={`w-full max-w-2xl space-y-2`}>
       <figure>
         <img
           src={`/go-logo.svg`}
           alt={`Logo`}
-          className="w-24 h-auto mb-6 mx-auto"
+          className="w-52 h-auto mb-6 mx-auto"
         />
       </figure>
       <h2 className="text-center text-2xl font-bold">
         Go + Next + Postgres + Docker
       </h2>
-      <h3 className="text-xl text-center font-semibold">Users List</h3>
+
       {/* display users */}
-      <div className="overflow-x-auto">
+      {isUsersEmpty ? (
+       <div role="alert" className="alert">
+       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="stroke-info shrink-0 w-6 h-6"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+       <span>No users added. Use the add user action below to add a user</span>
+     </div>
+      ):(
+        <div className="overflow-x-auto">
         <table className="table">
           {/* head */}
           <thead>
@@ -89,7 +95,7 @@ export const Users = () => {
             </tr>
           </thead>
           <tbody>
-            {[...users, { id: 1, name: "abhinav", email: "abhinav" }].map(
+            {users.map(
               (user) => (
                 <tr key={user.id}>
                   <th>{user.id}</th>
@@ -122,8 +128,7 @@ export const Users = () => {
           </tbody>
         </table>
       </div>
-
-      <h3 className="text-center text-xl font-semibold">Actions</h3>
+      )}
       <div className="w-full grid grid-cols-2">
         {/* Create user */}
         <form onSubmit={createUser} className="card p-2 space-y-4">
